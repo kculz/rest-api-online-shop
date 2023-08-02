@@ -1,7 +1,6 @@
 const Product = require('../models/Products');
 
-module.exports = {
-    createProduct: async (req,res) => {
+    const createProduct = async (req,res) => {
         const newProduct = new Product(req.body);
         try {
             await newProduct.save();
@@ -10,9 +9,9 @@ module.exports = {
             res.status(500).json(`failed to create product.`);
             console.log(`Creating product error!\n ${error}`);
         }
-    },
+    }
 
-    getAllProducts: async (req,res) => {
+    const getAllProducts = async (req,res) => {
         try {
             const products = await Product.find().sort({createdAt: -1});
             res.status(200).json(products); 
@@ -21,9 +20,9 @@ module.exports = {
             console.log(`Getting products error!\n ${error}`);
             
         }
-    },
+    }
 
-    getProduct: async (req,res) => {
+    const getProduct = async (req,res) => {
         const {id} = req.params;
         try {
             const product = await Product.findById(id);
@@ -32,9 +31,9 @@ module.exports = {
             res.status(500).json(`failed to get product.`);
             console.log(`Getting product error!\n ${error}`);
         }
-    },
+    }
 
-    searchProduct: async (req,res) => {
+    const searchProduct = async (req,res) => {
 
         try {
             const result = await Product.aggregate(
@@ -57,7 +56,11 @@ module.exports = {
             res.status(500).json(`failed to get products.`);
             console.log(`Searching  product error!\n ${error}`);
         }
-    },
+    }
 
-
-}
+    module.exports = {
+        createProduct,
+        getAllProducts,
+        getProduct,
+        searchProduct
+    }

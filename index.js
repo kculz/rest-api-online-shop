@@ -1,22 +1,25 @@
-const express = require('express');
-const {default: mongoose}  = require('mongoose');
-const cors = require('cors');
+const express = require('express')
+require('dotenv').config()
+const cors = require('cors')
+const mongoose = require('mongoose')
+const productsRouter = require('./routes/products')
 
-const productRouter = require('./routes/products')
-
-
-const app = express();
-require('dotenv').config();
-const port = process.env.PORT || 3000
+const app = express()
+const port = 3000
 
 mongoose.connect(process.env.MONGO_URI)
-    .then(()=> console.log(`DB Connected`))
-    .catch((e)=> console.log(`DB Connection error!\n ${e}`));
+    .then(() => {
+        console.log(`DB Connected`)
+    })
+    .catch((e)=> {
+        console.log(`Error!\n${e}`)
+    })
 
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(cors);
+app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
-app.get('/', (req, res) => res.send('Hello World!'));
-app.use('/api/products', productRouter);
-app.listen(port, () => console.log(`server running on http://localhost:${port}`));
+app.use('/api/v1/products', productsRouter)
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.listen(port, () => console.log(`Example app listening on port ${port}!`))
